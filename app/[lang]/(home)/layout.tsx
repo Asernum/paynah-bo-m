@@ -66,7 +66,7 @@ export default async function RootLayout({
                             {children}
                         </div>
                     </div>
-                    <DashboardMainMenuFooter lang={params.lang}/>
+                    <DashboardMainMenuFooter merchant={merchant} lang={params.lang}/>
                 </div>
                 <Toaster/>
             </NavigationLoadingProviders>
