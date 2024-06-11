@@ -46,7 +46,7 @@ export function getColumns(lang: string): ColumnDef<IMerchantUser>[] {
             header: ({ column }) => (
                 <DataTableColumnHeader className={`text-xs font-normal`} column={column} title="Nom utilisateur" />
             ),
-            cell: ({ row }) => <div className="min-w-[6rem]">{`${row.original.user.firstname} ${row.original.user.lastname}`}</div>,
+            cell: ({ row }) => <div className="min-w-[6rem]">{`${row.original.user?.firstname} ${row.original.user?.lastname}`}</div>,
             enableSorting: false,
             enableHiding: false,
         },
@@ -84,7 +84,7 @@ export function getColumns(lang: string): ColumnDef<IMerchantUser>[] {
             cell: ({ row }) => {
                 return (
                     <div className="">
-                        {row.original.user.login}
+                        {row.original.user?.login}
                     </div>
                 )
             },
@@ -97,7 +97,7 @@ export function getColumns(lang: string): ColumnDef<IMerchantUser>[] {
             cell: ({ row }) => {
                 return (
                     <div className="">
-                        {formatDate(row.original.user.createdAt, lang)}
+                        {formatDate(row.original.user?.createdAt, lang)}
                     </div>
                 )
             },

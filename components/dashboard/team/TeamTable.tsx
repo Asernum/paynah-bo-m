@@ -79,7 +79,7 @@ export default function TeamTable({ searchItems, lang, merchant, isTeamListLoadi
         setLoading(true);
         getMerchantUsers(String(merchant.merchantsIds[0].id), String(merchant.accessToken))
             .then(data => {
-                console.log(data);
+                console.log('teamData', data);
                 setLoading(false);
                 setIsTeamListLoading(false);
                 setUserAccounts(data);
