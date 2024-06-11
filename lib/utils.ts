@@ -18,6 +18,10 @@ export function formatCFA(amount: number) {
     return formattedAmount;
 }
 
+export const formatNumber = (number: number) => {
+    return new Intl.NumberFormat('fr-FR').format(number);
+};
+
 export function balanceOffset(balance: number, skaleetBalance: number) {
 
     const nonCompensatedBalance = balance - skaleetBalance;
