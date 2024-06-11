@@ -183,8 +183,9 @@ export default function DashboardMainMenuFooter({lang}: AuthFooterProps) {
                                             <Tooltip>
                                                 <TooltipTrigger asChild>
                                                     <Link
-                                                        className={`inline-flex ${pathname.startsWith(Routes.dashboard.sendMoney.replace('{lang}', lang)) ? 'bg-black' : 'bg-[#fafafa] hover:bg-[#EAEAEA] duration-200'} p-3 rounded-xl aspect-square justify-center items-center`}
-                                                        href={Routes.dashboard.sendMoney.replace('{lang}', lang)}>
+                                                        className={`inline-flex opacity-60 cursor-not-allowed ${pathname.startsWith(Routes.dashboard.sendMoney.replace('{lang}', lang)) ? 'bg-black' : 'bg-[#fafafa] hover:bg-[#EAEAEA] duration-200'} p-3 rounded-xl aspect-square justify-center items-center`}
+                                                        href={`#`}>
+                                                        {/*href={Routes.dashboard.sendMoney.replace('{lang}', lang)}>*/}
                                                         {/*<svg className={`w-[1.2rem] fill-[#afafaf]`} viewBox="0 0 22.642 21.229">*/}
                                                         {/*    <g transform="translate(0 0)">*/}
                                                         {/*        <path*/}
