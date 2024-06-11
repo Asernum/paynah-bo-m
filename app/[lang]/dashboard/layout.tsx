@@ -5,10 +5,10 @@ import NavigationLoadingProviders from "@/app/[lang]/navigation-loading-provider
 import {i18n, Locale} from "@/i18n.config";
 import {Toaster} from "react-hot-toast";
 import AuthProvider from "@/components/auth-provider";
-import Link from "next/link";
-import Routes from "@/components/Routes";
-import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
+// import Link from "next/link";
+// import Routes from "@/components/Routes";
+// import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
+// import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import DashboardMainMenuFooter from "@/components/dashboard/MainMenu";
 import DashboardTopMenu from "@/components/dashboard/TopMenu";
 import {redirect, usePathname} from "next/navigation";
