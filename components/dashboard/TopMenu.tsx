@@ -9,17 +9,28 @@ import {IUser} from "@/core/interfaces/user";
 import {useEffect, useState} from "react";
 import {getMerchantBankAccounts} from "@/core/apis/bank-account";
 import {IAccount} from "@/core/interfaces/account";
-import {auth} from "@/auth";
-import {useSession} from "next-auth/react";
-import {clientFetchData} from "@/core/apis/download-file";
 import {usePathname} from "next/navigation";
+// import {useRouter} from "next13-progressbar";
+import jwtDecode, {JwtPayload} from "jsonwebtoken";
+import {useCookies} from "react-cookie";
 
 interface DashboardTopMenuProps {
     lang: Locale,
     merchant: IUser,
+    tokenExpire?: boolean
 }
 
-export default function DashboardTopMenu({lang, merchant}: DashboardTopMenuProps) {
+const checkTokenExpiry = (token: string | null): boolean => {
+    if (!token) return true;
+
+    const decodedToken = jwtDecode.decode(token) as JwtPayload;
+    if (!decodedToken || !decodedToken.exp) return true;
+
+    const expiryTime = decodedToken.exp * 1000;
+    return Date.now() >= expiryTime;
+};
+
+export default function DashboardTopMenu({lang, merchant, tokenExpire}: DashboardTopMenuProps) {
     const [isLoading, setLoading] = useState(true);
     const [balance, setBalance] = useState(0);
     const [availableBalance, setAvailableBalance] = useState(0);
@@ -27,6 +38,9 @@ export default function DashboardTopMenu({lang, merchant}: DashboardTopMenuProps
     const [accounts, setAccounts] = useState<any[]>([]);
 
     const pathname = usePathname();
+
+    // const [cookies, setCookie, removeCookie] = useCookies(['authjs.session-token']);
+    // const router = useRouter();
 
     function initializeCurrentAccount(accounts: IAccount[]) {
         if (accounts.length > 0) {
@@ -86,8 +100,11 @@ export default function DashboardTopMenu({lang, merchant}: DashboardTopMenuProps
                         </svg>
                     </Link>
                     <div className={`inline-flex items-center space-x-[5rem]`}>
-                        <TopMenuSoldInfos lang={lang} merchant={merchant} balance={balance} availableBalance={availableBalance} isLoading={isLoading} />
-                        <TopMenuAccountInfos lang={lang} merchant={merchant} accounts={accounts} currentAccount={currentAccount} isDataLoading={isLoading} handleChangeAccount={handleChangeAccount} />
+                        <TopMenuSoldInfos lang={lang} merchant={merchant} balance={balance}
+                                          availableBalance={availableBalance} isLoading={isLoading}/>
+                        <TopMenuAccountInfos lang={lang} merchant={merchant} accounts={accounts}
+                                             currentAccount={currentAccount} isDataLoading={isLoading}
+                                             handleChangeAccount={handleChangeAccount}/>
                     </div>
                 </div>
             </div>

@@ -308,7 +308,7 @@ export default function LastTransactions({lang, merchant}: LastTransactionsProps
                         <Table>
                             <TableHeader>
                                 <TableRow className={`text-xs border-[#f4f4f4]`}>
-                                    <TableHead className={`text-[#afafaf] font-normal h-9 max-w-[8rem]`}>ID
+                                    <TableHead className={`text-[#afafaf] font-normal h-9 min-w-[8rem] max-w-[9rem]`}>ID
                                         Transactions</TableHead>
                                     <TableHead
                                         className={`text-[#afafaf] font-normal h-9 max-w-[7rem]`}>Descritpion</TableHead>
