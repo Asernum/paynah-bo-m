@@ -347,3 +347,12 @@ export const activePayouts = () => {
     ];
 }
 
+export const validateEmail = (email: string | undefined) => {
+    if (email === undefined || email === '') {
+        return false;
+    }
+
+    const emailRegex = /^[\w.%+-]+@(paynah\.com|asernum\.com)$/;
+    return emailRegex.test(email);
+};
+

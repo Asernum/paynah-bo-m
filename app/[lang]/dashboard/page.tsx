@@ -35,7 +35,7 @@ export default async function Home({params: { lang }}: {
     const accountCountryOperators = await getCountryOperators(String(merchant.country), String(merchant.accessToken));
 
     const accountsRes = await getMerchantBankAccounts(String(merchant.merchantsIds[0].id), String(merchant.accessToken));
-    // console.log(accountsRes);
+    console.log(merchant);
 
     return (
         <>
