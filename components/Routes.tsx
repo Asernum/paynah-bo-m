@@ -17,6 +17,7 @@ const Routes = {
         transactions: '/{lang}/dashboard/transactions',
         beneficiaries: '/{lang}/dashboard/send-money/beneficiaries',
         pointsOfSale: '/{lang}/dashboard/points-of-sale',
+        supply: '/{lang}/dashboard/supply',
         team: '/{lang}/dashboard/team',
     }
 }

@@ -6,6 +6,8 @@ export const searchParamsSchema = z.object({
     sort: z.string().optional(),
     search: z.string().optional(),
     status: z.string().optional(),
+    type: z.string().optional(),
+    terminalId: z.string().optional(),
     from: z.string().optional(),
     to: z.string().optional(),
 })

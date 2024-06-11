@@ -15,3 +15,8 @@ export interface ITransaction {
     customer_lastname?: string;
     status: string;
 }
+
+export interface ITransactionType {
+    id: string;
+    name: string;
+}

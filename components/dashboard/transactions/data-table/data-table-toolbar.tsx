@@ -20,6 +20,8 @@ import {Calendar} from "@/components/ui/calendar";
 import {Label} from "@/components/ui/label";
 import Link from "next/link";
 import Routes from "@/components/Routes";
+import { ITransactionType } from "@/core/interfaces/transaction";
+import { ITerminal } from "@/core/interfaces/pointOfSale";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>,
@@ -29,12 +31,18 @@ interface DataTableToolbarProps<TData> {
   setPSearch: (value: (((prevState: string) => string) | string)) => void,
   pStatus: string,
   setPStatus: (value: (((prevState: string) => string) | string)) => void,
+  pType: string,
+  setPType: (value: (((prevState: string) => string) | string)) => void,
+  pTerminalId: string,
+  setPTerminalId: (value: (((prevState: string) => string) | string)) => void,
   date: DateRange | undefined,
   setDate: (value: (((prevState: (DateRange | undefined)) => (DateRange | undefined)) | DateRange | undefined)) => void,
   lang: string
+  transactionsTypes: ITransactionType[]
+  terminals: ITerminal[]
 }
 
-export function DataTableToolbar<TData>({ table, newRowLink, deleteRowsAction, pSearch, setPSearch, pStatus, setPStatus, date, setDate, lang }: DataTableToolbarProps<TData>) {
+export function DataTableToolbar<TData>({ table, newRowLink, deleteRowsAction, pSearch, setPSearch, pStatus, setPStatus, date, setDate, lang, transactionsTypes, terminals, pType, setPType, pTerminalId, setPTerminalId }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0
   const [isDeletePending, startDeleteTransition] = React.useTransition()
 
@@ -49,12 +57,24 @@ export function DataTableToolbar<TData>({ table, newRowLink, deleteRowsAction, p
     }
   });
 
-  const transactionsTypes = [
-    {key: 'all', value: 'Tous types'},
-    {key: 'PAYIN', value: 'Acception'},
-    {key: 'PAYOUT', value: 'Envoi'},
-    {key: 'PAYIN_TOP_UP', value: 'Rechargement'},
-  ];
+  const rewriteTransactionTypeName = (transactionTypeName: string) => {
+    switch (transactionTypeName) {
+      case 'PAYIN':
+        return 'Acception';
+      case 'PAYOUT':
+        return 'Envoi';
+      case 'PAYIN_TOP_UP':
+        return 'Rechargement';
+      default:
+        return transactionTypeName;
+    }
+  }
+  // const transactionsTypes = [
+  //   {key: 'all', value: 'Tous types'},
+  //   {key: 'PAYIN', value: 'Acception'},
+  //   {key: 'PAYOUT', value: 'Envoi'},
+  //   {key: 'PAYIN_TOP_UP', value: 'Rechargement'},
+  // ];
 
   const transactionsStatus = [
     {key: 'all', value: 'Tous status'},
@@ -69,10 +89,10 @@ export function DataTableToolbar<TData>({ table, newRowLink, deleteRowsAction, p
     {key: 'CI_WAVE', value: 'WAVE'},
   ];
 
-  const Tpe = [
-    {key: 'all', value: 'Tous TPE'},
-    {key: 'id', value: 'T909E88RR'},
-  ];
+  // const Tpe = [
+  //   {key: 'all', value: 'Tous TPE'},
+  //   {key: 'T909E88RR', value: 'T909E88RR'},
+  // ];
 
   const Services = [
     {key: 'all', value: 'Tous Points en ligne'},
@@ -189,23 +209,23 @@ export function DataTableToolbar<TData>({ table, newRowLink, deleteRowsAction, p
                   <Label className={`font-normal text-sm block mb-1`}>Transactions :</Label>
                   <div className={`grid grid-cols-3 gap-1`}>
                     <div>
-                      <Select onValueChange={(value) => setPStatus(value)} defaultValue={pStatus}>
+                      <Select onValueChange={(value) => setPType(value)} defaultValue={pType}>
                         <SelectTrigger
                             className={`text-xs w-full h-[2.5rem] rounded-full bg-white border border-[#e4e4e4] font-normal [&>span]:text-left`}>
                           <SelectValue placeholder="Type"/>
                         </SelectTrigger>
                         <SelectContent className={`bg-[#f0f0f0]`}>
-                          {transactionsTypes.map((item, index) => (
+                          {transactionsTypes.map((item: ITransactionType, index: number) => (
                               <SelectItem key={index} className={`text-xs px-7 flex items-center focus:bg-gray-100 font-normal`}
-                                          value={item.key}>
-                                {item.value}
+                                          value={item.id}>
+                                {rewriteTransactionTypeName(item.name)}
                               </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     </div>
                     <div>
-                      <Select onValueChange={(value) => setPStatus(value)} defaultValue={pStatus}>
+                    <Select onValueChange={(value) => { console.log(value);  setPStatus(value)}} defaultValue={pStatus}>
                         <SelectTrigger
                             className={`w-full text-xs h-[2.5rem] rounded-full bg-white border border-[#e4e4e4] font-normal [&>span]:text-left`}>
                           <SelectValue placeholder="Statut"/>
@@ -253,7 +273,25 @@ export function DataTableToolbar<TData>({ table, newRowLink, deleteRowsAction, p
                               )}
                           >
                             <CalendarIcon className="mr-2 h-4 w-4"/>
-                            {date?.from ? (
+                            {
+                              date?.from == undefined || date?.to == undefined ? (
+                                <span>Pick a date</span>
+                              ) : (
+                                date?.from ? (
+                                  date.to ? (
+                                        <>
+                                          {format(date.from, "dd LLL y", {locale: lang == 'fr' ? fr : enUS})} -{" "}
+                                          {format(date.to, "dd LLL y", {locale: lang == 'fr' ? fr : enUS})}
+                                        </>
+                                    ) : (
+                                        format(date.from, "dd LLL y", {locale: lang == 'fr' ? fr : enUS})
+                                    )
+                                ) : (
+                                    <span>Pick a date</span>
+                                )
+                              )
+                            }
+                            {/* {date?.from ? (
                                 date.to ? (
                                     <>
                                       {format(date.from, "dd LLL y", {locale: lang == 'fr' ? fr : enUS})} -{" "}
@@ -264,7 +302,7 @@ export function DataTableToolbar<TData>({ table, newRowLink, deleteRowsAction, p
                                 )
                             ) : (
                                 <span>Pick a date</span>
-                            )}
+                            )} */}
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="end">
@@ -287,16 +325,16 @@ export function DataTableToolbar<TData>({ table, newRowLink, deleteRowsAction, p
                   <Label className={`font-normal text-sm block mb-1`}>Points de vente :</Label>
                   <div className={`grid grid-cols-6 gap-1`}>
                     <div className={`col-span-2`}>
-                      <Select onValueChange={(value) => setPStatus(value)} defaultValue={pStatus}>
+                      <Select onValueChange={(value) => { console.log(value);  setPTerminalId(value)}} defaultValue={pTerminalId}>
                         <SelectTrigger
                             className={`text-xs w-full h-[2.5rem] rounded-full bg-white border border-[#e4e4e4] font-normal [&>span]:text-left`}>
                           <SelectValue placeholder="TPE"/>
                         </SelectTrigger>
                         <SelectContent className={`bg-[#f0f0f0]`}>
-                          {Tpe.map((item, index) => (
+                          {terminals.map((item, index) => (
                               <SelectItem key={index} className={`text-xs px-7 flex items-center focus:bg-gray-100 font-normal`}
-                                          value={item.key}>
-                                {item.value}
+                                          value={item.name}>
+                                {item.name}
                               </SelectItem>
                           ))}
                         </SelectContent>

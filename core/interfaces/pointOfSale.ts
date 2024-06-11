@@ -24,3 +24,16 @@ export interface IPointOfSale {
     merchantId: string;
     posType: IPointOfSaleType;
 }
+
+export interface ITerminal {
+    id?: string;
+    name: string;
+    type: string;
+    country: string;
+    legalForm: string;
+    ownerEmail: string;
+    ownerFirstname: string;
+    ownerLastname: string;
+    password: string;
+    kyc: any;
+}

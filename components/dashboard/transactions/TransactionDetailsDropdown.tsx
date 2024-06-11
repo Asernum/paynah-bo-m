@@ -68,8 +68,7 @@ export const TransactionDetailsDropdown = ({ transaction, lang, children }: Drop
         </div>
 
         {isOpen && (
-            // <div className={`origin-top-right absolute h-24 right-0 pc:w-[86.7vw]  large:w-[78vw] shadow-lg ring-1 bg-white ml-8 ring-black ring-opacity-5 ${isOpen ? 'z-50' : 'z-10'} mt-5 border-y-0`}>
-            <div className={`origin-top-right absolute h-auto right-0 w-[86.7vw] shadow-lg ring-1 bg-white ml-8 ring-black ring-opacity-5 ${isOpen ? 'z-50' : 'z-10'} mt-6 border-y-2 border-t-0 border-l-2 border-r-2 ${transaction.transaction_type.name == 'PAYIN' ? 'border-[#F7D8D8]' : 'border-[#ACEEFF]' }`}>
+            <div className={`origin-top-right absolute h-auto right-0 w-[95.9rem] shadow-lg ring-1 bg-white ml-8 ring-black ring-opacity-5 ${isOpen ? 'z-50' : 'z-10'} mt-6 border-y-2 border-t-0 border-l-2 border-r-2 ${transaction.transaction_type.name == 'PAYIN' ? 'border-[#F7D8D8]' : 'border-[#ACEEFF]' } translate-x-9`}>
                 <div className="py-1 flex text-left">
                     <div className={`min-h-[6rem] pt-6 pb-7 px-4 bg-white rounded-b-2xl`}>
                         <div className={`grid grid-cols-1 gap-1`}>

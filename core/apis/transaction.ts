@@ -42,3 +42,8 @@ export async function getFilterableTransactionsExport(url: string, token: string
     const resData = await fetchData(url, 'GET', null, token, false);
     return resData;
 }
+
+export async function getTransactionsType(url: string, token: string) {
+    const resData = await fetchData(url, 'GET', null, token, false);
+    return resData;
+}
