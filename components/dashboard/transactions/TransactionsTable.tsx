@@ -83,8 +83,8 @@ export default function TransactionsTable({ searchItems, lang, selectedAccount, 
     const [terminals, setTerminals] = useState<ITerminal[]>([]);
     const [transactionsPagination, setTransactionsPagination] = useState<any>();
     const [date, setDate] = React.useState<DateRange | undefined>({
-        from: undefined, // searchItems.from ? new Date(searchItems.from) : startOfYear(new Date()),
-        to: undefined, // searchItems.to ? new Date(searchItems.to) : endOfDay(currentDate),
+        from: searchItems.from ? new Date(searchItems.from) : undefined, // searchItems.from ? new Date(searchItems.from) : startOfYear(new Date()),
+        to: searchItems.to ? new Date(searchItems.to) : undefined, // searchItems.to ? new Date(searchItems.to) : endOfDay(currentDate),
     })
 
     const query = {
@@ -104,9 +104,9 @@ export default function TransactionsTable({ searchItems, lang, selectedAccount, 
     const endPeriod = new Date(query.to ?? "");
     const formatStartPeriod = startPeriod.toLocaleDateString('en-GB');
     const formatEndPeriod = endPeriod.toLocaleDateString('en-GB');
-    const url = `/transactions/all-transactions/with-filters?merchantId=${query.merchantId}&searchTerm=${query.search ?? ""}&status=${query.status ?? ""}&page=${query.page}&perPage=${query.perPage}&from=${query.from == undefined ? '' : formatStartPeriod}&to=${query.to == undefined ? '' : formatEndPeriod}&type=${(query.type == 'all' ? '' : query.type) ?? ""}&terminalId=${(query.terminalId == 'all' ? '' : query.terminalId) ?? ""}&csv=false`;
+    const url = `/transactions/all-transactions/with-filters?merchantId=${query.merchantId}&searchTerm=${query.search ?? ""}&status=${query.status ?? ""}&page=${query.page}&perPage=${query.perPage}&from=${query.from == undefined ? startOfYear(new Date()).toLocaleDateString('en-GB') : formatStartPeriod}&to=${query.to == undefined ? endOfDay(currentDate).toLocaleDateString('en-GB') : formatEndPeriod}&type=${(query.type == 'all' ? '' : query.type) ?? ""}&terminalId=${(query.terminalId == 'all' || query.terminalId == 'Tous TPE' ? '' : query.terminalId) ?? ""}&csv=false`;
     console.log(url, query);
-    const urlDownload = `/transactions/all-transactions/with-filters?merchantId=${query.merchantId}&searchTerm=${query.search ?? ""}&status=${query.status ?? ""}&page=${query.page}&perPage=${query.perPage}&from=${formatStartPeriod}&to=${formatEndPeriod}&type=${(query.type == 'all' ? '' : query.type) ?? ""}&csv=true`;
+    const urlDownload = `/transactions/all-transactions/with-filters?merchantId=${query.merchantId}&searchTerm=${query.search ?? ""}&status=${query.status ?? ""}&page=${query.page}&perPage=${query.perPage}&from=${query.from == undefined ? startOfYear(new Date()).toLocaleDateString('en-GB') : formatStartPeriod}&to=${query.to == undefined ? endOfDay(currentDate).toLocaleDateString('en-GB') : formatEndPeriod}&type=${(query.type == 'all' ? '' : query.type) ?? ""}&terminalId=${(query.terminalId == 'all' || query.terminalId == 'Tous TPE' ? '' : query.terminalId) ?? ""}&csv=true`;
     function exportTransactionsData() {
         setExportDataLoading(true);
 

@@ -99,6 +99,8 @@ export function DataTableToolbar<TData>({ table, newRowLink, deleteRowsAction, p
     {key: 'id', value: 'Service 1'},
   ];
 
+  console.log('terminals', terminals);
+
   return (
       <>
         {/*<div className={`bg-white rounded-3xl flex space-y-2.5 2xl:space-y-0 items-start 2xl:items-center flex-col 2xl:flex-row 2xl:justify-between px-6 pb-5 pt-4 mb-6`}>*/}
@@ -275,7 +277,7 @@ export function DataTableToolbar<TData>({ table, newRowLink, deleteRowsAction, p
                             <CalendarIcon className="mr-2 h-4 w-4"/>
                             {
                               date?.from == undefined || date?.to == undefined ? (
-                                <span>Pick a date</span>
+                                <span>Choisir une période</span>
                               ) : (
                                 date?.from ? (
                                   date.to ? (
