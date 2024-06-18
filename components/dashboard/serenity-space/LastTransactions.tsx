@@ -33,6 +33,8 @@ import Routes from "@/components/Routes";
 import loadingData from "@/components/dashboard/lottie/loading-2.json";
 import Lottie from "react-lottie";
 import LoadingAnimation from "@/components/dashboard/lottie/LoadingAnimation";
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
+import toast from "react-hot-toast";
 
 interface LastTransactionsProps {
     lang: Locale,
@@ -122,6 +124,19 @@ export default function LastTransactions({lang, merchant}: LastTransactionsProps
             pAccount: "",
         }
     });
+
+    const copyPaymentLink = async (label: string, dataToCopy: string) => {
+        try {
+            await navigator.clipboard.writeText(dataToCopy);
+            toast.success(`${label} copié!`, {
+                className: '!bg-green-50 !max-w-xl !text-green-600 !shadow-2xl !shadow-green-50/50 text-sm font-medium'
+            });
+        } catch (err) {
+            return toast.error("une erreur est survenue!", {
+                className: '!bg-red-50 !max-w-xl !text-red-600 !shadow-2xl !shadow-red-50/50 text-sm font-medium'
+            });
+        }
+    }
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         console.log(values);
@@ -323,9 +338,20 @@ export default function LastTransactions({lang, merchant}: LastTransactionsProps
                             <TableBody>
                                 {transactions.map((transaction: ITransaction) => (
                                     <TableRow className={`border-[#f4f4f4]`} key={transaction.transactionId}>
-                                        <TableCell
-                                            className="text-xs font-medium !py-3.5 break-all">{transaction.transactionId}</TableCell>
-                                        <TableCell className="text-xs !py-3.5">{transaction.description}</TableCell>
+                                        <TableCell className="">
+                                            <TooltipProvider delayDuration={10}>
+                                                <Tooltip>
+                                                    <TooltipTrigger asChild>
+                                                        <span
+                                                            className={`text-sm cursor-pointer leading-3 line-clamp-1`}>{transaction.transactionId}</span>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent onClick={() => copyPaymentLink('ID Transaction', transaction.transactionId as string)}>
+                                                        <p className={`text-xs`}>{transaction.transactionId}</p>
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                            </TooltipProvider>
+                                        </TableCell>
+                                        <TableCell className="text-xs !py-3.5 text-ellipsis overflow-hidden">{transaction.description}</TableCell>
                                         <TableCell className="text-xs font-medium !py-3.5">
                                             <div
                                                 className={`${transaction.transaction_type.name == TransactionsType.DEBIT ? 'text-[#ff0000]' : 'text-[#19b2a6]'}`}>{transaction.transaction_type.name == TransactionsType.DEBIT ? '-' : ''}{formatCFA(transaction.amount)}</div>

@@ -77,6 +77,7 @@ interface TDataTableProps<TData, TValue> {
     isLoading: boolean,
     exportTransactionsData: (e: any) => void,
     isExportDataLoading: boolean,
+    totalCount: string,
 }
 
 const defaultOptions = {
@@ -88,7 +89,7 @@ const defaultOptions = {
         }
     };
 
-export function TDataTable<TData, TValue>({ table, columns, searchableColumns = [], filterableColumns = [], selectedAccount = 'all', newRowLink, deleteRowsAction, pSearch, setPSearch, pStatus, setPStatus, date, setDate, lang, isLoading, exportTransactionsData, isExportDataLoading }: TDataTableProps<TData, TValue>) {
+export function TDataTable<TData, TValue>({ table, columns, searchableColumns = [], filterableColumns = [], selectedAccount = 'all', newRowLink, deleteRowsAction, pSearch, setPSearch, pStatus, setPStatus, date, setDate, lang, isLoading, exportTransactionsData, isExportDataLoading, totalCount }: TDataTableProps<TData, TValue>) {
     return (
         <div className="w-full space-y-2.5 overflow-auto">
             <DataTableToolbar
@@ -104,6 +105,7 @@ export function TDataTable<TData, TValue>({ table, columns, searchableColumns = 
                 deleteRowsAction={deleteRowsAction}
                 exportTransactionsData={exportTransactionsData}
                 isExportDataLoading={isExportDataLoading}
+                totalCount={totalCount}
             />
             <div className="">
                 {

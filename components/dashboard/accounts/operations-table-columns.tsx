@@ -156,7 +156,7 @@ export function getColumns(lang: string): ColumnDef<ITransaction>[] {
                                     <ClipboardList className="mr-2 h-3.5 w-3.5" />
                                     <span className={`mt-[1.5px]`}>{`Détails de l'opération`}</span>
                                 </DropdownMenuItem>
-                                <DropdownMenuSeparator />
+                                {/* <DropdownMenuSeparator />
                                 <DropdownMenuItem className={`text-xs cursor-pointer`}>
                                     <AlertTriangle className="mr-2 h-3.5 w-3.5" />
                                     <span className={`mt-[1.5px]`}>Faire une réclamation</span>
@@ -165,7 +165,7 @@ export function getColumns(lang: string): ColumnDef<ITransaction>[] {
                                 <DropdownMenuItem className={`text-xs cursor-pointer`}>
                                     <RotateCw className="mr-2 h-3.5 w-3.5" />
                                     <span className={`mt-[1.5px]`}>{`Refaire l'opération`}</span>
-                                </DropdownMenuItem>
+                                </DropdownMenuItem> */}
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>

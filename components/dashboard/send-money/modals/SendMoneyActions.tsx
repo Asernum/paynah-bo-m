@@ -458,7 +458,7 @@ export default function SendMoneyActions({lang, merchant, countries, accounts, b
     function fetchCountryOperators(countryCode: string) {
         console.log(countryCode, countries);
         // @ts-ignore
-        const countryFilter: Icountry[] = countries.filter((country: ICountry) => country.code == countryCode);
+        const countryFilter: Icountry[] = (countries && countries.length > 0) ? countries.filter((country: ICountry) => country.code == countryCode) : [];
         const countryId = countryFilter[0]?.id;
         console.log(countryId);
         getCountryOperators(String(countryId), String(merchant.accessToken))

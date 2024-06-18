@@ -31,6 +31,7 @@ export default function PaynahCard({ lang, className, onClick, merchant }: Payna
     const [displayAvailableBalance, setDisplayAvailableBalance] = useState(true);
     const [balance, setBalance] = useState(0);
     const [availableBalance, setAvailableBalance] = useState(0);
+    const [isAccountActionLoading, setAccountActionLoading] = useState(false);
 
     const pathname = usePathname()
 
@@ -42,6 +43,7 @@ export default function PaynahCard({ lang, className, onClick, merchant }: Payna
             console.log('Paynah card', data);
             setBalance(data.total_balance);
             setAvailableBalance(data.total_skaleet_balance);
+            setAccountActionLoading(true);
             setLoading(false)
         })
         .catch(err => {
@@ -51,10 +53,12 @@ export default function PaynahCard({ lang, className, onClick, merchant }: Payna
     }
 
     useEffect(() => {
-        fetchMerchantBankAccounts();
+        if (!isAccountActionLoading) {
+            fetchMerchantBankAccounts()
+        }
         console.log('1', pathname)
         console.log('1-2', balance)
-    }, [pathname]);
+    }, [pathname, fetchMerchantBankAccounts, isAccountActionLoading]);
 
     const showLoader = () => {
         return (

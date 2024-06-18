@@ -24,6 +24,7 @@ interface FilterableTransactionsProps {
         to?: string,
         status?: string,
         type?: string,
+        period?: string,
         terminalId?: string,
     },
     merchant: IUser

@@ -40,6 +40,7 @@ interface TransactionsProps {
         to?: string;
         status?: string;
         type?: string;
+        period?: string;
         terminalId?: string;
     },
     lang: Locale,
@@ -77,6 +78,7 @@ export default function TransactionsTable({ searchItems, lang, selectedAccount, 
     const [pSearch, setPSearch] = useState(searchItems.search ?? '');
     const [pStatus, setPStatus] = useState(searchItems.status ?? '');
     const [pType, setPType] = useState(searchItems.type ?? '');
+    const [pPeriod, setPPeriod] = useState(searchItems.period ?? '');
     const [pTerminalId, setPTerminalId] = useState(searchItems.terminalId ?? '');
     const [transactions, setTransactions] = useState<TransactionsDataType[]>([]);
     const [transactionsTypes, setTransactionsType] = useState<ITransactionType[]>([]);
@@ -97,6 +99,7 @@ export default function TransactionsTable({ searchItems, lang, selectedAccount, 
         to: date?.to,
         status : searchItems.status,
         type : searchItems.type,
+        period : searchItems.period,
         terminalId : searchItems.terminalId
     }
 
@@ -213,6 +216,7 @@ export default function TransactionsTable({ searchItems, lang, selectedAccount, 
         pSearch,
         pStatus,
         pType,
+        pPeriod,
         pTerminalId,
         date
     })
@@ -281,6 +285,8 @@ export default function TransactionsTable({ searchItems, lang, selectedAccount, 
                                         setPType={setPType}
                                         pTerminalId={pTerminalId}
                                         setPTerminalId={setPTerminalId}
+                                        pPeriod={pPeriod}
+                                        setPPeriod={setPPeriod}
                                     />
                             </div>
                         </div>

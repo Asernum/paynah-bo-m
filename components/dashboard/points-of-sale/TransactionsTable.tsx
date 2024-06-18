@@ -16,6 +16,7 @@ import { ITransaction } from '@/core/interfaces/transaction';
 import { getFilterableTransactions, getTransactions } from "@/core/apis/transaction";
 import toast from "react-hot-toast";
 import {downloadFile} from "@/core/apis/download-file";
+import {formatNumber} from "@/lib/utils";
 
 interface TransactionsTableProps {
     searchItems: {
@@ -229,6 +230,7 @@ export default function TransactionsTable({ searchItems, lang, selectedAccount, 
                 lang={lang}
                 exportTransactionsData={exportTransactionsData}
                 isExportDataLoading={isExportDataLoading}
+                totalCount={formatNumber(transactionsPagination?.totalCount ?? 0)}
             />
         </div>
     );

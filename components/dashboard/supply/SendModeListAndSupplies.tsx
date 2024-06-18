@@ -97,7 +97,7 @@ export default function SendModeListAndSupplies({lang, searchItems, merchant}: S
     return (
         <div className={`flex flex-col h-full space-y-3`}>
             <div className={`account-list`}>
-                <div className={`flex p-1 space-x-7 2xl:min-h-[10rem] snap-x snap-mandatory overflow-x-auto`}>
+                <div className={`flex p-1 space-x-7 2xl:min-h-[10rem] snap-x snap-mandatory`}>
                     <AccountsAction lang={lang} merchant={merchant} mode={mode} isAccountActionLoading={isAccountActionLoading} setAccountActionLoading={setAccountActionLoading} open={open} setOpen={setOpen} account={account}>
                         {''}
                     </AccountsAction>
@@ -116,12 +116,12 @@ export default function SendModeListAndSupplies({lang, searchItems, merchant}: S
                         <div className="flex flex-row h-[8rem]">
                             <div className="flex-column w-3/4">
                                 <div className="flex flex-row space-x-1">
-                                    <div>
+                                    <div className="pt-1.5">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="15.214" height="15.214" viewBox="0 0 15.214 15.214">
                                             <path id="_5e94a90cc30706fa992f8ced1c38048b" data-name="5e94a90cc30706fa992f8ced1c38048b" d="M7.874.264a7.607,7.607,0,1,0,7.6,7.6,7.62,7.62,0,0,0-7.6-7.6Zm0,1.383A6.226,6.226,0,1,1,1.646,7.869,6.21,6.21,0,0,1,7.874,1.647ZM7.863,3.02a.691.691,0,0,0-.684.705V7.869a.691.691,0,0,0,.205.489l2.765,2.767a.691.691,0,1,0,.975-.98L8.562,7.583V3.725a.691.691,0,0,0-.7-.705Z" transform="translate(-0.264 -0.264)" fill-rule="evenodd"/>
                                         </svg>
                                     </div>
-                                    <div className="inline-flex flex-col text-[11px] font-light text-black">
+                                    <div className="inline-flex flex-col text-[11px] font-light text-black leading-tight py-1">
                                         <span>Disponibilité des fonds :</span><br></br>
                                         <span>06 heures après la réception du virement bancaire</span>
                                     </div>
@@ -159,12 +159,12 @@ export default function SendModeListAndSupplies({lang, searchItems, merchant}: S
                         <div className="flex flex-row h-[8rem]">
                             <div className="flex-column w-3/4">
                                 <div className="flex flex-row space-x-1">
-                                    <div>
+                                    <div className="pt-1.5">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="15.214" height="15.214" viewBox="0 0 15.214 15.214">
                                             <path id="_5e94a90cc30706fa992f8ced1c38048b" data-name="5e94a90cc30706fa992f8ced1c38048b" d="M7.874.264a7.607,7.607,0,1,0,7.6,7.6,7.62,7.62,0,0,0-7.6-7.6Zm0,1.383A6.226,6.226,0,1,1,1.646,7.869,6.21,6.21,0,0,1,7.874,1.647ZM7.863,3.02a.691.691,0,0,0-.684.705V7.869a.691.691,0,0,0,.205.489l2.765,2.767a.691.691,0,1,0,.975-.98L8.562,7.583V3.725a.691.691,0,0,0-.7-.705Z" transform="translate(-0.264 -0.264)" fill-rule="evenodd"/>
                                         </svg>
                                     </div>
-                                    <div className="inline-flex flex-col text-[11px] font-light text-black">
+                                    <div className="inline-flex flex-col text-[11px] font-light text-black leading-tight py-1">
                                         <span>Disponibilité des fonds :</span><br></br>
                                         <span>Immédiate</span>
                                     </div>
@@ -208,12 +208,12 @@ export default function SendModeListAndSupplies({lang, searchItems, merchant}: S
                         <div className="flex flex-row h-[8rem]">
                             <div className="flex-column w-3/4">
                                 <div className="flex flex-row space-x-1">
-                                    <div>
+                                    <div className="pt-1.5">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="15.214" height="15.214" viewBox="0 0 15.214 15.214">
                                             <path id="_5e94a90cc30706fa992f8ced1c38048b" data-name="5e94a90cc30706fa992f8ced1c38048b" d="M7.874.264a7.607,7.607,0,1,0,7.6,7.6,7.62,7.62,0,0,0-7.6-7.6Zm0,1.383A6.226,6.226,0,1,1,1.646,7.869,6.21,6.21,0,0,1,7.874,1.647ZM7.863,3.02a.691.691,0,0,0-.684.705V7.869a.691.691,0,0,0,.205.489l2.765,2.767a.691.691,0,1,0,.975-.98L8.562,7.583V3.725a.691.691,0,0,0-.7-.705Z" transform="translate(-0.264 -0.264)" fill-rule="evenodd"/>
                                         </svg>
                                     </div>
-                                    <div className="inline-flex flex-col text-[11px] font-light text-black">
+                                    <div className="inline-flex flex-col text-[11px] font-light text-black leading-tight py-1">
                                         <span>Disponibilité des fonds :</span><br></br>
                                         <span>06 heures après le dépôt bancaire</span>
                                     </div>
@@ -252,12 +252,12 @@ export default function SendModeListAndSupplies({lang, searchItems, merchant}: S
                         <div className="flex flex-row h-[8rem]">
                             <div className="flex-column w-3/4">
                                 <div className="flex flex-row space-x-1">
-                                    <div>
+                                    <div className="pt-1.5">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="15.214" height="15.214" viewBox="0 0 15.214 15.214">
                                             <path id="_5e94a90cc30706fa992f8ced1c38048b" data-name="5e94a90cc30706fa992f8ced1c38048b" d="M7.874.264a7.607,7.607,0,1,0,7.6,7.6,7.62,7.62,0,0,0-7.6-7.6Zm0,1.383A6.226,6.226,0,1,1,1.646,7.869,6.21,6.21,0,0,1,7.874,1.647ZM7.863,3.02a.691.691,0,0,0-.684.705V7.869a.691.691,0,0,0,.205.489l2.765,2.767a.691.691,0,1,0,.975-.98L8.562,7.583V3.725a.691.691,0,0,0-.7-.705Z" transform="translate(-0.264 -0.264)" fill-rule="evenodd"/>
                                         </svg>
                                     </div>
-                                    <div className="inline-flex flex-col text-[11px] font-light text-black">
+                                    <div className="inline-flex flex-col text-[11px] font-light text-black leading-tight py-1">
                                         <span>Disponibilité des fonds :</span><br></br>
                                         <span>Immédiate</span>
                                     </div>

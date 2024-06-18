@@ -17,7 +17,9 @@ import { addDays, startOfYear, endOfDay, format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { getFilterableTransactions, getTransactions } from "@/core/apis/transaction";
 import toast from "react-hot-toast";
-import {downloadFile} from "@/core/apis/download-file";
+import { downloadFile } from "@/core/apis/download-file";
+import {formatNumber} from "@/lib/utils";
+
 interface TransactionsTableProps {
     searchItems: {
         per_page: number;
@@ -157,6 +159,7 @@ export default function TransactionsTable({ searchItems, lang, selectedAccount, 
                 lang={lang}
                 exportTransactionsData={exportTransactionsData}
                 isExportDataLoading={isExportDataLoading}
+                totalCount={formatNumber(transactionsPagination?.totalCount ?? 0)}
             />
         </div>
     );

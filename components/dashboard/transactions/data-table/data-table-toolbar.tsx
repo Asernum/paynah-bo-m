@@ -1,9 +1,9 @@
 "use client"
 
 import * as React from "react"
+import { useRef, useEffect, RefObject } from "react"
 import type { Table } from "@tanstack/react-table"
 import { fr, enUS } from 'date-fns/locale';
-
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,17 +11,25 @@ import {Form} from "@/components/ui/form";
 import * as z from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {CalendarIcon, RotateCcw, Search} from "lucide-react";
+import {CalendarIcon, RotateCcw, Search, Info} from "lucide-react";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {DateRange} from "react-day-picker";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
-import {format} from "date-fns";
+import {format, add, sub, startOfMonth, endOfMonth, subMonths} from "date-fns";
 import {Calendar} from "@/components/ui/calendar";
 import {Label} from "@/components/ui/label";
 import Link from "next/link";
 import Routes from "@/components/Routes";
 import { ITransactionType } from "@/core/interfaces/transaction";
 import { ITerminal } from "@/core/interfaces/pointOfSale";
+// import { Tooltip } from "@/components/custom/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>,
@@ -35,6 +43,8 @@ interface DataTableToolbarProps<TData> {
   setPType: (value: (((prevState: string) => string) | string)) => void,
   pTerminalId: string,
   setPTerminalId: (value: (((prevState: string) => string) | string)) => void,
+  pPeriod: string,
+  setPPeriod: (value: (((prevState: string) => string) | string)) => void,
   date: DateRange | undefined,
   setDate: (value: (((prevState: (DateRange | undefined)) => (DateRange | undefined)) | DateRange | undefined)) => void,
   lang: string
@@ -42,10 +52,11 @@ interface DataTableToolbarProps<TData> {
   terminals: ITerminal[]
 }
 
-export function DataTableToolbar<TData>({ table, newRowLink, deleteRowsAction, pSearch, setPSearch, pStatus, setPStatus, date, setDate, lang, transactionsTypes, terminals, pType, setPType, pTerminalId, setPTerminalId }: DataTableToolbarProps<TData>) {
+export function DataTableToolbar<TData>({ table, newRowLink, deleteRowsAction, pSearch, setPSearch, pStatus, setPStatus, date, setDate, lang, transactionsTypes, terminals, pType, setPType, pTerminalId, setPTerminalId, pPeriod, setPPeriod }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0
   const [isDeletePending, startDeleteTransition] = React.useTransition()
-
+  const popoverTriggerRef: RefObject<HTMLButtonElement> = useRef(null);
+  
   const formSchema = z.object({
     search: z.string()
   })
@@ -89,6 +100,15 @@ export function DataTableToolbar<TData>({ table, newRowLink, deleteRowsAction, p
     {key: 'CI_WAVE', value: 'WAVE'},
   ];
 
+  const periodeOptions = [
+    {key: 'today', value: "Aujourd'hui"},
+    {key: 'yesterday', value: "Hier"},
+    {key: 'lastSevenDays', value: "les 7 derniers jours"},
+    {key: 'lastMonth', value: "le mois dernier"},
+    {key: 'currentMonth', value: "le mois en cours"},
+    {key: 'custom', value: "Personnaliser"},
+  ];
+
   // const Tpe = [
   //   {key: 'all', value: 'Tous TPE'},
   //   {key: 'T909E88RR', value: 'T909E88RR'},
@@ -100,6 +120,57 @@ export function DataTableToolbar<TData>({ table, newRowLink, deleteRowsAction, p
   ];
 
   console.log('terminals', terminals);
+
+  const handlePeriodeOptionChange = (value: string) => {
+    if (value == 'today') {
+      const dateRange: DateRange = {
+          from: new Date(),
+          to: add(new Date(), {days: 1})
+      };
+      setDate(dateRange);
+    }
+    if (value == 'yesterday') {
+      const dateRange: DateRange = {
+          from: sub(new Date(), {days: 1}),
+          to: new Date()
+      };
+      setDate(dateRange);
+    }
+    if (value == 'lastSevenDays') {
+      const dateRange: DateRange = {
+        from: sub(new Date(), {days: 6}),
+        to: add(new Date(), {days: 1}),
+      };
+      setDate(dateRange);
+    }
+    if (value == 'lastMonth') {
+      const dateRange: DateRange = {
+        from: startOfMonth(subMonths(new Date(), 1)),
+        to: startOfMonth(new Date()),
+      };
+      setDate(dateRange);
+    }
+    if (value == 'currentMonth') {
+      const dateRange: DateRange = {
+        from: startOfMonth(new Date()),
+        to: add(endOfMonth(new Date()),{days: 1}),
+      };
+      setDate(dateRange);
+    }
+    if (value === 'custom') { 
+      console.log(popoverTriggerRef.current, value)
+      setTimeout(() => {
+        console.log('Deuxième instruction');
+        const calendarPickerRef = document?.querySelector('#date') as HTMLButtonElement
+        calendarPickerRef.click();
+      }, 1000);
+    }
+  };
+
+  useEffect(() => {
+    
+  }, []);
+
 
   return (
       <>
@@ -199,11 +270,27 @@ export function DataTableToolbar<TData>({ table, newRowLink, deleteRowsAction, p
             <form action="" className={`w-full`}>
               <div className={`grid grid-cols-12 gap-4`}>
                 <div className={`col-span-7 2xl:col-span-3`}>
-                  <Label className={`font-normal text-sm block mb-1`}>Filtrer par :</Label>
+                  <div className="flex">
+                    <Label className={`font-normal text-sm block mb-1 mr-1`}>Filtrer par : </Label>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <div className="mb-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 50 50">
+                                <path d="M25,2C12.297,2,2,12.297,2,25s10.297,23,23,23s23-10.297,23-23S37.703,2,25,2z M25,11c1.657,0,3,1.343,3,3s-1.343,3-3,3 s-3-1.343-3-3S23.343,11,25,11z M29,38h-2h-4h-2v-2h2V23h-2v-2h2h4v2v13h2V38z"></path>
+                            </svg>
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <div className="break-all">Recherchez par ID transaction, numéro de compte, référence opérateur</div>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
                   <div className={`relative`}>
                     <Input value={pSearch} type={`text`}
                            className={`font-normal pl-9 bg-white text-xs rounded-full h-[2.5rem] w-full`}
-                           placeholder="Recherchez par ID transaction, numéro de compte, référence opérateur" onChange={(e) => setPSearch(e.target.value)}/>
+                           placeholder="Recherchez" onChange={(e) => setPSearch(e.target.value)}/>
                     <Search className={`absolute h-4 w-4 top-3 left-3`}/>
                   </div>
                 </div>
@@ -264,9 +351,27 @@ export function DataTableToolbar<TData>({ table, newRowLink, deleteRowsAction, p
                   <Label className={`font-normal text-sm block mb-1`}>Période :</Label>
                   <div className={`grid grid-cols-1 gap-1`}>
                     <div>
+                      <Select onValueChange={(value) => handlePeriodeOptionChange(value)} defaultValue={pPeriod}>
+                        <SelectTrigger
+                            className={`w-full text-xs h-[2.5rem] rounded-full bg-white border border-[#e4e4e4] font-normal [&>span]:text-left`}>
+                          <SelectValue placeholder="Période"/>
+                        </SelectTrigger>
+                        <SelectContent className={`bg-[#f0f0f0]`}>
+                          {periodeOptions.map((item, index) => (
+                              <SelectItem key={index} className={`text-xs px-7 flex items-center focus:bg-gray-100 font-normal`}
+                                          value={item.key}>
+                                {item.value}
+                              </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                       <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
+                        <PopoverTrigger ref={popoverTriggerRef} asChild>
+                          <button id="date" className={cn(
+                                  "w-full 2xl:w-[14rem] text-xs justify-start text-left font-normal",
+                                  !date && "text-muted-foreground"
+                              )}></button>
+                          {/* <Button
                               id="date"
                               variant={"outline"}
                               className={cn(
@@ -293,21 +398,9 @@ export function DataTableToolbar<TData>({ table, newRowLink, deleteRowsAction, p
                                 )
                               )
                             }
-                            {/* {date?.from ? (
-                                date.to ? (
-                                    <>
-                                      {format(date.from, "dd LLL y", {locale: lang == 'fr' ? fr : enUS})} -{" "}
-                                      {format(date.to, "dd LLL y", {locale: lang == 'fr' ? fr : enUS})}
-                                    </>
-                                ) : (
-                                    format(date.from, "dd LLL y", {locale: lang == 'fr' ? fr : enUS})
-                                )
-                            ) : (
-                                <span>Pick a date</span>
-                            )} */}
-                          </Button>
+                          </Button> */}
                         </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="end">
+                        <PopoverContent className="w-auto p-0 -translate-y-3 translate-x-3" align="end">
                           <Calendar
                               initialFocus
                               mode="range"

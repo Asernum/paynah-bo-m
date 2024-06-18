@@ -78,6 +78,8 @@ interface TDataTableProps<TData, TValue> {
     setPType: (value: (((prevState: string) => string) | string)) => void,
     pTerminalId: string,
     setPTerminalId: (value: (((prevState: string) => string) | string)) => void,
+    pPeriod: string,
+    setPPeriod: (value: (((prevState: string) => string) | string)) => void,
     date: DateRange | undefined,
     setDate: (value: (((prevState: (DateRange | undefined)) => (DateRange | undefined)) | DateRange | undefined)) => void,
     lang: string,
@@ -86,7 +88,7 @@ interface TDataTableProps<TData, TValue> {
     terminals: ITerminal[]
 }
 
-export function TDataTable<TData, TValue>({table, columns, searchableColumns = [], filterableColumns = [], selectedAccount = 'all', newRowLink, deleteRowsAction, pSearch, setPSearch, pStatus, setPStatus, date, setDate, lang, isLoading, transactionsTypes, terminals, pType, setPType, pTerminalId, setPTerminalId }: TDataTableProps<TData, TValue>) {
+export function TDataTable<TData, TValue>({table, columns, searchableColumns = [], filterableColumns = [], selectedAccount = 'all', newRowLink, deleteRowsAction, pSearch, setPSearch, pStatus, setPStatus, date, setDate, lang, isLoading, transactionsTypes, terminals, pType, setPType, pTerminalId, setPTerminalId, pPeriod, setPPeriod }: TDataTableProps<TData, TValue>) {
 
     const defaultOptions = {
         loop: true,
@@ -117,6 +119,8 @@ export function TDataTable<TData, TValue>({table, columns, searchableColumns = [
                 setPType={setPType}
                 pTerminalId={pTerminalId}
                 setPTerminalId={setPTerminalId}
+                pPeriod={pPeriod}
+                setPPeriod={setPPeriod}
             />
             <div className="bg-white">
                 {isLoading ? <div className={`flex justify-center items-center border border-[#f0f0f0] rounded h-[24rem]`}>
@@ -146,7 +150,7 @@ export function TDataTable<TData, TValue>({table, columns, searchableColumns = [
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
                                     // @ts-ignore
-                                    className={`border-[#fafafa] ${row.getIsSelected() && (row.original.transaction_type.name == 'PAYIN' ? '!bg-[#F7D8D8]' : '!bg-[#F5FDFF]')}`}
+                                    className={`border-[#fafafa] ${row.getIsSelected() && (row.original.transaction_type.name == 'PAYIN' ? '!bg-[#f6ecec]' : '!bg-[#F5FDFF]')}`}
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
                                 >

@@ -43,14 +43,14 @@ export default function AccountListAndTransactions({lang, searchItems, merchant}
     const [account, setAccount] = useState<IAccount>();
     const [mode, setMode] = useState('add');
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     function fetchMerchantBankAccounts() {
         // @ts-ignore
-        setLoading(true);
         getMerchantBankAccounts(String(merchant.merchantsIds[0].id), String(merchant.accessToken))
         .then(data => {
             setAccounts(data.accounts);
-            setBalance(data.total_balance);
-            setAvailableBalance(data.total_skaleet_balance);
+            console.log('COMPTES', data.accounts);
+            setAccountActionLoading(true);
             setLoading(false);
         })
         .catch(err => {
@@ -91,9 +91,11 @@ export default function AccountListAndTransactions({lang, searchItems, merchant}
     }
 
     useEffect(() => {
-        fetchMerchantBankAccounts()
-    }, []);
-
+        if (!isAccountActionLoading) {
+            fetchMerchantBankAccounts()
+        }
+    }, [fetchMerchantBankAccounts, isAccountActionLoading]);
+    console.log(accounts);
     return (
         <div className={`flex flex-col h-full space-y-3`}>
             <div className={`account-list`}>
