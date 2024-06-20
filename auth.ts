@@ -55,6 +55,9 @@ const config = {
         strategy: 'jwt',
         maxAge: 24 * 60 * 60 // 1 day
     },
+    jwt: {
+        maxAge: 24 * 60 * 60 // 1 day
+    },
     pages: {
         signIn: '/auth/login',
     },
@@ -102,8 +105,9 @@ const config = {
 
                 if (decodedToken.exp && decodedToken.exp < currentTime) {
                     console.log("Token expired");
+                    params.token.accessTokenExpires = decodedToken.exp;
                     await signOut();
-                    return {};
+                    // return {};
                 }
             }
 
@@ -130,8 +134,9 @@ const config = {
 
                 if (decodedToken.exp && decodedToken.exp < currentTime) {
                     console.log("Token expired in session");
+                    session.user.accessTokenExpires = decodedToken.exp;
                     await signOut();
-                    session = null;
+                    // session = null;
                 }
             }
 

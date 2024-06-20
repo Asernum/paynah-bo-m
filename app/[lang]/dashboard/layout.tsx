@@ -62,7 +62,7 @@ export default async function RootLayout({
         }
     }
 
-    if (!merchant || isEmptyObject(merchant)) {
+    if (isEmptyObject(merchant)) {
         // await logout();
         // setCookie('authjs.session-token', null, { cookies });
         // console.log('cookies', getCookies({ cookies }));
