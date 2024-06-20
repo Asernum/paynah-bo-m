@@ -45,7 +45,7 @@ interface FileUploadProgress {
 
 export default function SignUpFilesUpload({lang, handleGoToBack, handleGoToNext, legalForm, isLoading, errorsArray, stepOne, onSubmit, progress, showProgressBars}: SignUpFilesUploadProps) {
 
-    console.log(errorsArray);
+    // console.log(errorsArray);
     // console.log(legalForm);
 
     let progressObject = Object.entries(progress);

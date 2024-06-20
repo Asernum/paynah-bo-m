@@ -58,7 +58,7 @@ export default function PaynahCard({ lang, className, onClick, merchant }: Payna
         }
         console.log('1', pathname)
         console.log('1-2', balance)
-    }, [pathname, fetchMerchantBankAccounts, isAccountActionLoading]);
+    }, [pathname, isAccountActionLoading]);
 
     const showLoader = () => {
         return (
