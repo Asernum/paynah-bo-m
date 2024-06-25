@@ -7,7 +7,9 @@ export const searchParamsSchema = z.object({
     search: z.string().optional(),
     status: z.string().optional(),
     type: z.string().optional(),
+    period: z.string().optional(),
     terminalId: z.string().optional(),
+    operator: z.string().optional(),
     from: z.string().optional(),
     to: z.string().optional(),
 })

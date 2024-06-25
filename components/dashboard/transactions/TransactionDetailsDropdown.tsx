@@ -14,6 +14,7 @@ import {
     getTransactionType,
     TStatus
 } from "@/lib/utils";
+import toast from "react-hot-toast";
 
 interface DropdownProps {
     transaction: ITransaction;
@@ -61,6 +62,19 @@ export const TransactionDetailsDropdown = ({ transaction, lang, children }: Drop
         setIsOpen(!isOpen);
     };
 
+    const copyPaymentLink = async (label: string, dataToCopy: string) => {
+        try {
+            await navigator.clipboard.writeText(dataToCopy);
+            toast.success(`${label} copié!`, {
+                className: '!bg-green-50 !max-w-xl !text-green-600 !shadow-2xl !shadow-green-50/50 text-sm font-medium'
+            });
+        } catch (err) {
+            return toast.error("une erreur est survenue!", {
+                className: '!bg-red-50 !max-w-xl !text-red-600 !shadow-2xl !shadow-red-50/50 text-sm font-medium'
+            });
+        }
+    }
+
     return (
         <div className="relative inline-block items-center justify-center" ref={dropdownRef}>
         <div onClick={toggleDropdown}>
@@ -103,7 +117,19 @@ export const TransactionDetailsDropdown = ({ transaction, lang, children }: Drop
                                         </div>
                                         <div className={`flex-col mr-2`}>
                                             <h3 className={`font-light text-[#626262] text-xs mb-0.5`}>Référence</h3>
-                                            <span className={`text-sm font-medium leading-4`}>{transaction.reference ?? "-"}</span>
+                                                <span className={`text-sm font-medium leading-4`}>
+                                                    <TooltipProvider delayDuration={10}>
+                                                        <Tooltip>
+                                                            <TooltipTrigger asChild>
+                                                                <span
+                                                                    className={`text-sm cursor-pointer font-medium leading-4 line-clamp-1`}>{transaction.reference ?? "-"}</span>
+                                                            </TooltipTrigger>
+                                                            <TooltipContent onClick={() => copyPaymentLink('Référence', (transaction.reference ?? "-") as string)}>
+                                                                <p className={`text-xs`}>{transaction.reference ?? "-"}</p>
+                                                            </TooltipContent>
+                                                        </Tooltip>
+                                                    </TooltipProvider>
+                                                </span>
                                         </div>
                                         <div className={`flex-col mr-2`}>
                                             <h3 className={`font-light text-[#626262] text-xs mb-1`}>ID Transaction</h3>
@@ -114,7 +140,7 @@ export const TransactionDetailsDropdown = ({ transaction, lang, children }: Drop
                                                             <span
                                                                 className={`text-sm cursor-pointer font-medium leading-4 line-clamp-1`}>{transaction.transactionId}</span>
                                                         </TooltipTrigger>
-                                                        <TooltipContent>
+                                                        <TooltipContent onClick={() => copyPaymentLink('ID Transaction', transaction.transactionId as string)}>
                                                             <p className={`text-xs`}>{transaction.transactionId}</p>
                                                         </TooltipContent>
                                                     </Tooltip>

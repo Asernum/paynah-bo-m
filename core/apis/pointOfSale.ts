@@ -13,3 +13,8 @@ export async function getMerchantTerminals(url: string, token: string) {
     const resData = await fetchData(url, 'GET', null, token, true);
     return resData;
 }
+
+export async function createPointOfSales(values: Object, url: string, token: string) {
+    const resData = await fetchData(url, 'POST', values, token, true);
+    return resData;
+}

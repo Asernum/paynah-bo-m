@@ -68,7 +68,9 @@ interface UseDataTableProps<TData, TValue> {
   pStatus?: string
   date?: DateRange
   pType?: string;
+  pPeriod?: string;
   pTerminalId?: string;
+  pOperator?: string;
 }
 
 const schema = z.object({
@@ -77,7 +79,7 @@ const schema = z.object({
   sort: z.string().optional(),
 })
 
-export function useDataTable<TData, TValue>({data, columns, pageCount, searchableColumns = [], filterableColumns = [], selectedAccount = 'all', pSearch = '', pStatus = '', date, pType= '', pTerminalId= ''}: UseDataTableProps<TData, TValue>) {
+export function useDataTable<TData, TValue>({data, columns, pageCount, searchableColumns = [], filterableColumns = [], selectedAccount = 'all', pSearch = '', pStatus = '', date, pType= '', pTerminalId= '', pPeriod= '', pOperator= ''}: UseDataTableProps<TData, TValue>) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -164,7 +166,9 @@ export function useDataTable<TData, TValue>({data, columns, pageCount, searchabl
         account: selectedAccount,
         status: pStatus,
         type: pType,
+        period: pPeriod,
         terminalId: pTerminalId,
+        operator: pOperator,
       })}`,
       {
         scroll: false,
@@ -172,7 +176,7 @@ export function useDataTable<TData, TValue>({data, columns, pageCount, searchabl
     )
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageIndex, pageSize, selectedAccount, pStatus, pType, pTerminalId])
+  }, [pageIndex, pageSize, selectedAccount, pStatus, pType, pPeriod, pTerminalId, pOperator])
 
   // Handle server-side sorting
   const [sorting, setSorting] = React.useState<SortingState>([

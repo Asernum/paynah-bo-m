@@ -1,98 +1,117 @@
-"use client"
+"use client";
 
-import {Locale} from "@/i18n.config";
-import React, {useState, useEffect} from "react";
-import {ClipboardList, Pencil, Plus, PlusCircle, Search, Send, Trash2} from "lucide-react";
-
-import {formatCFA} from "@/lib/utils";
+import { Locale } from "@/i18n.config";
+import React, { useState, useEffect } from "react";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger
+  ClipboardList,
+  Pencil,
+  Plus,
+  PlusCircle,
+  Search,
+  Send,
+  Trash2,
+} from "lucide-react";
+
+import { formatCFA } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import BeneficiariesTable from "@/components/dashboard/send-money/BeneficiariesTable";
-import {Button} from "@/components/ui/button";
-import {Form} from "@/components/ui/form";
-import {Input} from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import * as z from "zod";
-import {useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {IUser} from "@/core/interfaces/user";
-import {IBeneficiary} from "@/core/interfaces/beneficiary";
-import {getMerchantBeneficiaries} from "@/core/apis/beneficiary";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { IUser } from "@/core/interfaces/user";
+import { IBeneficiary } from "@/core/interfaces/beneficiary";
+import { getMerchantBeneficiaries } from "@/core/apis/beneficiary";
+import BeneficiaryActions from "@/components/dashboard/send-money/modals/BeneficiaryActions";
 
 interface BeneficiaryListProps {
-    lang: Locale,
-    searchItems: {
-        per_page: number,
-        page: number,
-        search?: string,
-        from?: string,
-        sort?: string,
-        to?: string,
-        status?: string
-    },
-    merchant: IUser,
+  lang: Locale;
+  searchItems: {
+    per_page: number;
+    page: number;
+    search?: string;
+    from?: string;
+    sort?: string;
+    to?: string;
+    status?: string;
+  };
+  merchant: IUser;
 }
 
-export default function BeneficiaryList({lang, searchItems, merchant}: BeneficiaryListProps) {
+export default function BeneficiaryList({
+  lang,
+  searchItems,
+  merchant,
+}: BeneficiaryListProps) {
+  const [isLoading, setLoading] = useState(false);
+  const [selectedAccount, setSelectedAccount] = useState("all");
+  const [pSearch, setPSearch] = useState("");
+  const [beneficiaries, setBeneficiaries] = useState<IBeneficiary[]>([]);
 
-    const [isLoading, setLoading] = useState(false);
-    const [selectedAccount, setSelectedAccount] = useState('all');
-    const [pSearch, setPSearch] = useState('');
-    const [beneficiaries, setBeneficiaries] = useState<IBeneficiary[]>([]);
+  const formSchema = z.object({
+    search: z.string(),
+  });
 
-    const formSchema = z.object({
-        search: z.string()
-    })
+  const filterableForm = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      search: "",
+    },
+  });
 
-    const filterableForm = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            search: "",
-        }
-    });
+  function fetchMerchantBeneficiaries() {
+    // @ts-ignore
+    // console.log(merchant,'DATA');
+    getMerchantBeneficiaries(
+      String(merchant.merchantsIds[0].id),
+      String(merchant.accessToken)
+    )
+      .then((data) => {
+        console.log(data);
+        setBeneficiaries(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        setBeneficiaries([]);
+      });
+  }
 
-    function fetchMerchantBeneficiaries() {
-        // @ts-ignore
-        // console.log(merchant,'DATA');
-        getMerchantBeneficiaries(String(merchant.merchantsIds[0].id), String(merchant.accessToken))
-        .then((data) => {
-            console.log(data);
-            setBeneficiaries(data);
-            setLoading(false);
-        })
-        .catch(err => {
-            setLoading(false);
-            setBeneficiaries([]);
-        });
-    }
+  useEffect(() => {
+    fetchMerchantBeneficiaries();
+  }, []);
 
-    useEffect(() => {
-        fetchMerchantBeneficiaries();
-    }, []);
+  console.log(merchant, "DATA", beneficiaries);
 
-    console.log(merchant,'DATA');
-
-    return (
-        <div className={`flex flex-col h-full space-y-3`}>
-            <div className={`account-list`}>
-            <div className={`mb-4 mt-3`}>
-                    <div className={`flex justify-between items-center`}>
-                        <div className={`inline-flex items-center`}>
-                            <h1 className={`text-lg font-medium mr-4`}>Gestion des bénéficiaires</h1>
-                        </div>
-                        <div>
-                            <Button className={`px-6 items-center text-xs`}>
-                                <PlusCircle className={`h-4 w-4 mr-2`} />
-                                <span>Ajouter un bénéficiaire</span>
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-                {/* <div className={`flex p-1 space-x-2.5 2xl:min-h-[10rem] snap-x snap-mandatory overflow-x-auto`}>
+  return (
+    <div className={`flex flex-col h-full space-y-3`}>
+      <div className={`account-list`}>
+        <div className={`mb-4 mt-3`}>
+          <div className={`flex justify-between items-center`}>
+            <div className={`inline-flex items-center`}>
+              <h1 className={`text-lg font-medium mr-4`}>
+                Gestion des bénéficiaires
+              </h1>
+            </div>
+            <div>
+              <BeneficiaryActions lang={lang} merchant={merchant}>
+                <Button className={`px-6 items-center text-xs`}>
+                  <PlusCircle className={`h-4 w-4 mr-2`} />
+                  <span>Ajouter un bénéficiaire</span>
+                </Button>
+              </BeneficiaryActions>
+            </div>
+          </div>
+        </div>
+        {/* <div className={`flex p-1 space-x-2.5 2xl:min-h-[10rem] snap-x snap-mandatory overflow-x-auto`}>
                     <div onClick={() => setSelectedAccount('all')} className={`snap-end shrink-0 w-[40%] 2xl:w-[31%] bg-white flex flex-col justify-between cursor-pointer ${selectedAccount == 'all' && 'outline outline-offset-2 outline-2 outline-[#3c3c3c]'} space-y-6 2xl:space-y-6 p-4 rounded-3xl`}>
                         <div className={`flex justify-between items-start`}>
                             <div>
@@ -465,12 +484,17 @@ export default function BeneficiaryList({lang, searchItems, merchant}: Beneficia
                     </div>
                     <div className={`w-1 snap-end`}></div>
                 </div> */}
-            </div>
-            <div className={`h-full`}>
-                <div className={`bg-white flex-grow rounded-3xl h-full`}>
-                    <BeneficiariesTable searchItems={searchItems} lang={lang} selectedAccount={selectedAccount} beneficiaries={beneficiaries}  />
-                </div>
-            </div>
+      </div>
+      <div className={`h-full`}>
+        <div className={`bg-white flex-grow rounded-3xl h-full`}>
+          <BeneficiariesTable
+            searchItems={searchItems}
+            lang={lang}
+            selectedAccount={selectedAccount}
+            beneficiaries={beneficiaries}
+          />
         </div>
-    );
+      </div>
+    </div>
+  );
 }

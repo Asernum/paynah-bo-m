@@ -14,6 +14,8 @@ export interface ITransaction {
     customer_firstname?: string;
     customer_lastname?: string;
     status: string;
+    bankAccountId: string;
+    pos: string;
 }
 
 export interface ITransactionType {

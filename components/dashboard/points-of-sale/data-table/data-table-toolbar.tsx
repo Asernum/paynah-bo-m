@@ -33,9 +33,10 @@ interface DataTableToolbarProps<TData> {
   lang: string,
   exportTransactionsData: (e: any) => void,
   isExportDataLoading: boolean,
+  totalCount: string,
 }
 
-export function DataTableToolbar<TData>({ table, newRowLink, deleteRowsAction, pSearch, setPSearch, pStatus, setPStatus, date, setDate, lang, exportTransactionsData, isExportDataLoading }: DataTableToolbarProps<TData>) {
+export function DataTableToolbar<TData>({ table, newRowLink, deleteRowsAction, pSearch, setPSearch, pStatus, setPStatus, date, setDate, lang, exportTransactionsData, isExportDataLoading, totalCount }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0
   const [isDeletePending, startDeleteTransition] = React.useTransition()
 
@@ -53,7 +54,7 @@ export function DataTableToolbar<TData>({ table, newRowLink, deleteRowsAction, p
   return (
       <>
         <div className={`flex space-y-2.5 2xl:space-y-0 items-start 2xl:items-center flex-col 2xl:flex-row 2xl:justify-between px-6 pb-1 pt-4`}>
-          <h2 className={`font-medium text-base`}>{`Historique des transactions`}</h2>
+          <h2 className={`font-medium text-base`}>{`Historique des transactions (${totalCount})`}</h2>
           <Form {...filterableForm}>
             <form action="" className={`w-full 2xl:w-auto`}>
               <div className={`flex 2xl:inline-flex space-x-3 2xl:space-x-3`}>

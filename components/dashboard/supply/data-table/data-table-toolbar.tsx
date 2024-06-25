@@ -144,7 +144,7 @@ export function DataTableToolbar<TData>({ table, newRowLink, deleteRowsAction, p
                   </Button>
                 </div>
                 <div className={`flex items-center justify-end`}>
-                  <a className={``} href={`${Routes.dashboard.paymentLink.replace('{lang}', lang)}`}>
+                  <a className={``} href={`${Routes.dashboard.supply.replace('{lang}', lang)}`}>
                     <RotateCcw strokeWidth={2.5} className="text-[#D3D3D3] w-6 h-6" />
                   </a>
                 </div>

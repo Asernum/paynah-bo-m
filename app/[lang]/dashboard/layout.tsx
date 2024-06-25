@@ -14,6 +14,10 @@ import DashboardTopMenu from "@/components/dashboard/TopMenu";
 import {redirect, usePathname} from "next/navigation";
 import {IUser} from "@/core/interfaces/user";
 import {auth} from "@/auth";
+import {isEmptyObject} from "@/app/[lang]/onboarding/add-merchant/page";
+import {cookies} from "next/headers";
+import { setCookie, deleteCookie, getCookies } from 'cookies-next';
+import {logout} from "@/core/apis/login";
 
 const fontPaynah = Poppins({
   weight: ['100', '300', '400', '500', '600', '800', '900'],
@@ -56,6 +60,14 @@ export default async function RootLayout({
         if (merchant.merchantsIds && merchant.merchantsIds.length == 0) {
             return redirect('/onboarding/add-merchant');
         }
+    }
+
+    if (isEmptyObject(merchant)) {
+        // await logout();
+        // setCookie('authjs.session-token', null, { cookies });
+        // console.log('cookies', getCookies({ cookies }));
+        // return redirect('/auth/login');
+        console.log('session', session);
     }
 
     return (

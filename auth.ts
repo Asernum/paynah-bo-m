@@ -5,6 +5,7 @@ import {fetchData} from "@/lib/api";
 import {IUser} from "@/core/interfaces/user";
 import NextAuth, {AuthError} from "next-auth";
 import {getLocale} from "@/middleware";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 const config = {
     providers: [
@@ -54,6 +55,9 @@ const config = {
         strategy: 'jwt',
         maxAge: 24 * 60 * 60 // 1 day
     },
+    jwt: {
+        maxAge: 24 * 60 * 60 // 1 day
+    },
     pages: {
         signIn: '/auth/login',
     },
@@ -76,7 +80,7 @@ const config = {
                 // }
             }
         },
-        jwt(params: any) {
+        async jwt(params: any) {
             if (params.trigger === "update") {
                 return {...params.token, ...params.session.user}
             }
@@ -93,9 +97,23 @@ const config = {
                 params.token.accessToken = params.user.accessToken;
                 params.token.refreshToken = params.user.refreshToken;
             }
+
+            // Verify if the token is expired
+            if (params.token.accessToken) {
+                const decodedToken = jwt.decode(params.token.accessToken) as JwtPayload;
+                const currentTime = Math.floor(Date.now() / 1000);
+
+                if (decodedToken.exp && decodedToken.exp < currentTime) {
+                    console.log("Token expired");
+                    params.token.accessTokenExpires = decodedToken.exp;
+                    await signOut();
+                    // return {};
+                }
+            }
+
             return params.token;
         },
-        session({session, trigger, token}: any) {
+        async session({session, trigger, token}: any) {
             if (session.user) {
                 session.user.sub = token.sub;
                 session.user.login = token.login;
@@ -108,6 +126,20 @@ const config = {
                 session.user.accessToken = token.accessToken;
                 session.user.refreshToken = token.refreshToken;
             }
+
+            // Verify if the token is expired
+            if (token.accessToken) {
+                const decodedToken = jwt.decode(token.accessToken) as JwtPayload;
+                const currentTime = Math.floor(Date.now() / 1000);
+
+                if (decodedToken.exp && decodedToken.exp < currentTime) {
+                    console.log("Token expired in session");
+                    session.user.accessTokenExpires = decodedToken.exp;
+                    await signOut();
+                    // session = null;
+                }
+            }
+
             return session;
         }
     }

@@ -10,8 +10,8 @@ import SignUpFilesInfo from "@/components/auth/form/SignUpFilesInfo";
 import SignUpFilesUpload from "@/components/auth/form/SignUpFilesUpload";
 import SignUpOK from "@/components/auth/form/SignUpOK";
 import {IUser} from "@/core/interfaces/user";
-import {makeKycFilesUpload} from "@/core/apis/signup";
 import Routes from "@/components/Routes";
+import {makeKycFilesUpload} from "@/core/apis/client-requests";
 
 interface AddMerchantKycProps {
     lang: Locale,
@@ -149,8 +149,10 @@ export default function AddMerchantKyc({lang, merchant, merchantIdsInfos, legalF
                     }));
                 }, 50);
 
+                console.log(file);
+
                 const uploadKycFileRes = await makeKycFilesUpload(merchant, file);
-                console.log(uploadKycFileRes);
+                // console.log(uploadKycFileRes);
 
                 if (!uploadKycFileRes.success) {
                     setLoading(false);

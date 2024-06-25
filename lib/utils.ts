@@ -26,7 +26,8 @@ export function balanceOffset(balance: number, skaleetBalance: number) {
 
     const nonCompensatedBalance = balance - skaleetBalance;
 
-    const proportion = ((nonCompensatedBalance / balance) * 100) / (balance + skaleetBalance);
+    // const proportion = ((nonCompensatedBalance / balance) * 100) / (balance + skaleetBalance);
+    const proportion = balance == 0 ? 100 : (1 - (Math.abs(nonCompensatedBalance) / Math.abs(balance)))* 100 ;
     const proportionString = parseFloat(proportion.toFixed(2)).toString();
 
     return {
