@@ -13,7 +13,7 @@ import { TDataTable } from "@/components/dashboard/payment-link/data-table/DataT
 import { DateRange } from "react-day-picker";
 import { startOfYear, endOfDay } from "date-fns";
 import { IUser } from "@/core/interfaces/user";
-import { ITransaction } from "@/core/interfaces/transaction";
+import { ITransaction, ITransactionType } from "@/core/interfaces/transaction";
 import {
   getFilterableTransactions,
   getTransactions,
@@ -37,6 +37,7 @@ interface TransactionsTableProps {
   lang: string;
   selectedAccount: string;
   merchant: IUser;
+  setSelectedAccount: (value: ((prevState: string) => string) | string) => void;
 }
 
 export type TransactionsDataType = {
@@ -55,6 +56,7 @@ export default function TransactionsTable({
   lang,
   selectedAccount,
   merchant,
+  setSelectedAccount,
 }: TransactionsTableProps) {
   let currentDate = new Date();
   currentDate.setDate(currentDate.getDate() + 1);
@@ -90,21 +92,24 @@ export default function TransactionsTable({
   const endPeriod = new Date(query.to ?? "");
   const formatStartPeriod = startPeriod.toLocaleDateString("en-GB");
   const formatEndPeriod = endPeriod.toLocaleDateString("en-GB");
+  const searchTerm =
+    query.search !== undefined && query?.search?.trim() !== ""
+      ? query.search
+      : selectedAccount == "all"
+      ? ""
+      : selectedAccount;
   const url = `/transactions/all-transactions/with-filters?merchantId=${
     query.merchantId
-  }&searchTerm=${query.search ?? ""}&status=${query.status ?? ""}&page=${
-    query.page
-  }&perPage=${
+  }&status=${query.status ?? ""}&page=${query.page}&perPage=${
     query.perPage
-  }&from=${formatStartPeriod}&to=${formatEndPeriod}&csv=false`;
+  }&from=${formatStartPeriod}&to=${formatEndPeriod}&csv=false&searchTerm=${searchTerm}&type=PAYIN`;
 
   const urlDownload = `/transactions/all-transactions/with-filters?merchantId=${
     query.merchantId
-  }&searchTerm=${query.search ?? ""}&status=${query.status ?? ""}&page=${
-    query.page
-  }&perPage=${
+  }&status=${query.status ?? ""}&page=${query.page}&perPage=${
     query.perPage
-  }&from=${formatStartPeriod}&to=${formatEndPeriod}&csv=true`;
+  }&from=${formatStartPeriod}&to=${formatEndPeriod}&csv=true&searchTerm=${searchTerm}&type=PAYIN`;
+  console.log(url, selectedAccount, query.search);
   const exportTransactionsData = (e: any) => {
     setExportDataLoading(true);
     e.preventDefault();
@@ -200,6 +205,7 @@ export default function TransactionsTable({
         exportTransactionsData={exportTransactionsData}
         isExportDataLoading={isExportDataLoading}
         totalCount={formatNumber(transactionsPagination?.totalCount ?? 0)}
+        setSelectedAccount={setSelectedAccount}
       />
     </div>
   );

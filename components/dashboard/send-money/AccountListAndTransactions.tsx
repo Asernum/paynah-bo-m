@@ -14,7 +14,7 @@ import {
 import TransactionsTable from "@/components/dashboard/send-money/TransactionsTable";
 import AccountsAction from "@/components/dashboard/serenity-space/modals/AccountsAction";
 import { IUser } from "@/core/interfaces/user";
-import { ITransaction } from "@/core/interfaces/transaction";
+import { ITransaction, ITransactionType } from "@/core/interfaces/transaction";
 import { getMerchantBankAccounts } from "@/core/apis/bank-account";
 import { getMerchantBeneficiaries } from "@/core/apis/beneficiary";
 import { getTransactions } from "@/core/apis/transaction";
@@ -622,6 +622,7 @@ export default function AccountListAndTransactions({
             lang={lang}
             selectedAccount={selectedAccount}
             merchant={merchant}
+            setSelectedAccount={setSelectedAccount}
           />
         </div>
       </div>

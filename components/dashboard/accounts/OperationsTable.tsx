@@ -90,25 +90,23 @@ export default function OperationsTable({
   const endPeriod = new Date(query.to ?? "");
   const formatStartPeriod = startPeriod.toLocaleDateString("en-GB");
   const formatEndPeriod = endPeriod.toLocaleDateString("en-GB");
+  const searchTerm =
+    query.search !== undefined && query?.search?.trim() !== ""
+      ? query.search
+      : selectedAccount == "all"
+      ? ""
+      : selectedAccount;
   const url = `/transactions/all-transactions/with-filters?merchantId=${
     query.merchantId
-  }&searchTerm=${query.search ?? ""}&status=${query.status ?? ""}&page=${
-    query.page
-  }&perPage=${
+  }&status=${query.status ?? ""}&page=${query.page}&perPage=${
     query.perPage
-  }&from=${formatStartPeriod}&to=${formatEndPeriod}&csv=false${
-    selectedAccount == "all" ? "" : `&searchTerm=${selectedAccount}`
-  }`;
+  }&from=${formatStartPeriod}&to=${formatEndPeriod}&csv=false&searchTerm=${searchTerm}`;
   console.log(url);
   const urlDownload = `/transactions/all-transactions/with-filters?merchantId=${
     query.merchantId
-  }&searchTerm=${query.search ?? ""}&status=${query.status ?? ""}&page=${
-    query.page
-  }&perPage=${
+  }&status=${query.status ?? ""}&page=${query.page}&perPage=${
     query.perPage
-  }&from=${formatStartPeriod}&to=${formatEndPeriod}&csv=true${
-    selectedAccount == "all" ? "" : `&searchTerm=${selectedAccount}`
-  }`;
+  }&from=${formatStartPeriod}&to=${formatEndPeriod}&csv=true&searchTerm=${searchTerm}`;
   const exportTransactionsData = (e: any) => {
     setExportDataLoading(true);
     e.preventDefault();

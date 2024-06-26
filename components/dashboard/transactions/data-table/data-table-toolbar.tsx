@@ -47,7 +47,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { IOperator } from "@/core/interfaces/operator";
-import {left} from "@popperjs/core";
+import { left } from "@popperjs/core";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -143,9 +143,7 @@ export function DataTableToolbar<TData>({
     // {key: 'Expired', value: 'Expiré'},
   ];
 
-  const transactionsOperators = [
-    { key: "all", value: "Tous Opérateurs" },
-  ];
+  const transactionsOperators = [{ key: "all", value: "Tous Opérateurs" }];
 
   const periodeOptions = [
     { key: "today", value: "Aujourd'hui" },
@@ -321,7 +319,7 @@ export function DataTableToolbar<TData>({
                   </Label>
                   <TooltipProvider delayDuration={0}>
                     <Tooltip>
-                      <TooltipTrigger>
+                      <TooltipTrigger disabled={true}>
                         <div className="mb-1">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -335,10 +333,10 @@ export function DataTableToolbar<TData>({
                           </svg>
                         </div>
                       </TooltipTrigger>
-                      <TooltipContent align={"start"}>
-                        <div className="break-all">
-                          Recherchez par ID transaction, numéro de compte/téléphone,
-                          référence opérateur
+                      <TooltipContent className="">
+                        <div className="w-[16rem]">
+                          Recherchez par ID transaction, numéro de compte,
+                          référence opérateur, numéro de téléphone
                         </div>
                       </TooltipContent>
                     </Tooltip>
@@ -426,8 +424,8 @@ export function DataTableToolbar<TData>({
                       </SelectTrigger>
                       <SelectContent className={`bg-[#f0f0f0]`}>
                         <SelectItem
-                            className={`text-xs px-7 flex items-center focus:bg-gray-100 font-normal`}
-                            value={`all`}
+                          className={`text-xs px-7 flex items-center focus:bg-gray-100 font-normal`}
+                          value={`all`}
                         >
                           Tous les opérateurs
                         </SelectItem>
